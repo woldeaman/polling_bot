@@ -1,6 +1,7 @@
 """Definition of crawler for poll."""
 # -*- coding: utf-8 -*-
-import urllib
+import urllib.request as urreq
+import argparse as ap
 
 
 #################
@@ -13,13 +14,40 @@ last_place_vote = 'totalpoll%5Bchoices%5D%5B735e6363-7b6b-4424-9d5f-308c2dd8efbe
 ############################################################################################
 
 
-#################
-# RUN THE VOTES #
+##################
+#   DEFINITONS   #
 ############################################################################################
-vote_url = php_base+options+marlenes_vote  # set specific vote
-votes = 50  # set number of votes to commit
+def parser_input():
+    """Parse command line input so everyone can vote."""
+    parser = ap.ArgumentParser(description=("""Schick votes für Marlen ab."""),
+                               formatter_class=ap.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('-nbr', dest='nbr', type=int, help='Anzahl der Votes', default=50)
+    args = parser.parse_args()
 
-for i in range(votes):  # run the loop
-    with urllib.request.urlopen(vote_url) as f:
-        print(f.read().decode('utf-8'))
+    return args.nbr
 ############################################################################################
+
+
+#################
+#   MAIN LOOP   #
+############################################################################################
+def main():
+    vote_url = php_base+options+marlenes_vote  # set specific vote
+    votes = parser_input()  # set number of votes to commit
+
+    for i in range(votes):  # run the loop
+        with urreq.urlopen(vote_url) as f:
+            response = f.read().decode('utf-8')
+            if "Vielen Dank" in response:
+                print(f"Vote {i+1}/{votes} war erfolgreich!")
+            else:
+                print(f"Vote {i+1}/{votes} hat nicht funktioniert!")
+############################################################################################
+
+
+#############
+#  EXECUTE  #
+##########################################################################
+if __name__ == "__main__":
+    main()
+##########################################################################
