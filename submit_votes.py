@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import urllib.request as urreq
 import argparse as ap
+import numpy as np
+import time
 
 
 #################
@@ -26,9 +28,10 @@ def parser_input():
                                formatter_class=ap.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-nbr', dest='nbr', type=int, help='Anzahl der Votes', default=50)
     parser.add_argument('-choice', dest='id', type=int, help='Nummer für die gevoted werden soll', default=6)
+    parser.add_argument('-break', dest='brk', type=int, help='Maximaldauer für Pausen (in Sekunden)', default=30)
     args = parser.parse_args()
 
-    return args.nbr, args.id
+    return args.nbr, args.id, args.brk
 ############################################################################################
 
 
@@ -36,12 +39,14 @@ def parser_input():
 #   MAIN LOOP   #
 ############################################################################################
 def main():
-    vote_nbrs, vote_id = parser_input()  # read input
+    vote_nbrs, vote_id, brk_time = parser_input()  # read input
     vote_url = php_base+options+all_vote_ids[vote_id-1]  # set specific vote
 
     for i in range(vote_nbrs):  # run the loop
         with urreq.urlopen(vote_url) as f:
             response = f.read().decode('utf-8')
+            print("Warte auf nächsten Vote...", end='\r')
+            time.sleep(np.random.rand()*brk_time)
             if "Vielen Dank" in response:
                 print(f"Vote {i+1}/{vote_nbrs} war erfolgreich!", end='\r')
             else:
