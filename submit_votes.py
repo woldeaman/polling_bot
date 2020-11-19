@@ -45,12 +45,11 @@ def main():
     for i in range(vote_nbrs):  # run the loop
         with urreq.urlopen(vote_url) as f:
             response = f.read().decode('utf-8')
-            print("Warte auf nächsten Vote...", end='\r')
-            time.sleep(np.random.rand()*brk_time)
             if "Vielen Dank" in response:
-                print(f"Vote {i+1}/{vote_nbrs} war erfolgreich!", end='\r')
+                print(f"Vote {i+1}/{vote_nbrs} war erfolgreich! Warte auf nächsten Vote...", end='\r')
             else:
-                print(f"Vote {i+1}/{vote_nbrs} hat nicht funktioniert!")
+                print(f"Vote {i+1}/{vote_nbrs} hat nicht funktioniert! Warte auf nächsten Vote...")
+            time.sleep(np.random.rand()*brk_time)
 ############################################################################################
 
 
