@@ -26,8 +26,8 @@ def parser_input():
     """Parse command line input so everyone can vote."""
     parser = ap.ArgumentParser(description=("""Schick votes für LVB Abstimmung ab."""),
                                formatter_class=ap.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-nbr', dest='nbr', type=int, help='Anzahl der Votes', default=50)
-    parser.add_argument('-choice', dest='id', type=int, help='Nummer für die gevoted werden soll', default=6)
+    parser.add_argument('-nbr', dest='nbr', type=int, help='Anzahl der Votes', default=1)
+    parser.add_argument('-choice', dest='id', type=int, help='Nummer für die gevoted werden soll', default=1)
     parser.add_argument('-break', dest='brk', type=int, help='Maximaldauer für Pausen (in Sekunden)', default=30)
     args = parser.parse_args()
 
